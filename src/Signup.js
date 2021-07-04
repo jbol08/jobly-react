@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Signup = ({ signUp }) => {
+function Signup  ({ signUp })  {
 	const INITIAL_STATE = {
 		email     : '',
 		password  : '',
@@ -14,16 +14,16 @@ const Signup = ({ signUp }) => {
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
 	const [ errors, setErrors ] = useState([]);
 
-	const handleChange = (evt) => {
-		const { name, value } = evt.target;
+	const handleChange = (event) => {
+		const { name, value } = event.target;
 		setFormData((formData) => ({
 			...formData,
 			[name] : value
 		}));
 	};
 
-	const handleSubmit = async (evt) => {
-		evt.preventDefault();
+	const handleSubmit = async (event) => {
+		event.preventDefault();
 		let res = await signUp(formData);
 		if (res.success) {
 			setFormData(INITIAL_STATE);

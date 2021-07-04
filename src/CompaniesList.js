@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CompanyInfo from './CompanyDetails';
 import SearchForm from './SearchForm';
-import JoblyApi from './api';
+import JoblyApi from './Api';
 
 const Companies = () => {
 	const [ companiesList, setCompaniesList ] = useState(null);
