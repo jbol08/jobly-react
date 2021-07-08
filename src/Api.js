@@ -34,16 +34,49 @@ class JoblyApi {
     }
   }
 
-  // Individual API routes
-
-  /** Get details on a company by handle. */
 
   static async getCompany(handle) {
     let res = await this.request(`companies/${handle}`);
     return res.company;
   }
+  
+  static async getCurrentUser(username) {
+    let res = await this.request(`users/${username}`);
+    return res.user;
+  }
 
-  // obviously, you'll add a lot here ...
+  static async getCompanies(name) {
+    let res = await this.request("companies", { name });
+    return res.companies;
+  }
+// jobs list 
+  static async getJobs(title) {
+    let res = await this.request("jobs", { title });
+    return res.jobs;
+  }
+// apply
+
+  static async applyToJob(username, id) {
+    await this.request(`users/${username}/jobs/${id}`, {}, "post");
+  }
+
+  static async login(data) {
+    let res = await this.request(`auth/token`, data, "post");
+    return res.token;
+  }
+
+// signup
+  
+  static async signup(data) {
+    let res = await this.request(`auth/register`, data, "post");
+    return res.token;
+  }
+
+  static async saveProfile(username, data) {
+    let res = await this.request(`users/${username}`, data, "patch");
+    return res.user;
+  }
+
 }
 
 // for now, put token ("testuser" / "password" on class)

@@ -41,9 +41,9 @@ function App() {
     setCurrentUser(null);
     setToken(null);
   }
-  async function signUp(signupData) {
+  async function signup(signupData) {
     try {
-      let token = await JoblyApi.signUp(signupData);
+      let token = await JoblyApi.signup(signupData);
       setToken(token);
       return { success: true };
     } catch (errors) {
@@ -82,7 +82,7 @@ function App() {
             value={{ currentUser, setCurrentUser, hasAppliedToJob, applyToJob }}>
           <div className="App">
             <NavBar logout={logout} />
-            <Routes login={login} signup={signUp} />
+            <Routes login={login} signup={signup} />
           </div>
         </UserContext.Provider>
       </BrowserRouter>

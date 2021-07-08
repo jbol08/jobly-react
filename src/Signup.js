@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-function Signup  ({ signUp })  {
+function Signup({ signup }){
 	const INITIAL_STATE = {
 		email     : '',
 		password  : '',
@@ -14,7 +14,7 @@ function Signup  ({ signUp })  {
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
 	const [ errors, setErrors ] = useState([]);
 
-	const handleChange = (event) => {
+	function handleChange (event) {
 		const { name, value } = event.target;
 		setFormData((formData) => ({
 			...formData,
@@ -22,13 +22,13 @@ function Signup  ({ signUp })  {
 		}));
 	};
 
-	const handleSubmit = async (event) => {
+	async function handleSubmit(event){
 		event.preventDefault();
-		let res = await signUp(formData);
-		if (res.success) {
+		let result = await signup(formData);
+		if (result.success) {
 			setFormData(INITIAL_STATE);
 			history.push('/companies');
-		} else setErrors(res.errors);
+		} else setErrors(result.errors);
 	};
 
 	return (
@@ -37,7 +37,7 @@ function Signup  ({ signUp })  {
 			<div className="card">
 				<div className="card-body">
 					<form onSubmit={handleSubmit}>
-						<div className="Signup-username form-group">
+						<div className="username form-group">
 							<label htmlFor="username">Username</label>
 							<input
 								type="text"
@@ -49,7 +49,7 @@ function Signup  ({ signUp })  {
 								value={formData.username}
 							/>
 						</div>
-						<div className="Signup-password form-group">
+						<div className="password form-group">
 							<label htmlFor="password">Password</label>
 							<input
 								className="form-control"
@@ -61,7 +61,7 @@ function Signup  ({ signUp })  {
 								value={formData.password}
 							/>
 						</div>
-						<div className="Signup-first form-group">
+						<div className="first form-group">
 							<label htmlFor="firstName">First Name</label>
 							<input
 								type="text"
@@ -73,7 +73,7 @@ function Signup  ({ signUp })  {
 								value={formData.firstName}
 							/>
 						</div>
-						<div className="Signup-last form-group">
+						<div className="last form-group">
 							<label htmlFor="lastName">Last Name</label>
 							<input
 								type="text"
@@ -85,7 +85,7 @@ function Signup  ({ signUp })  {
 								value={formData.lastName}
 							/>
 						</div>
-						<div className="Signup-email form-group">
+						<div className="email form-group">
 							<label htmlFor="email">Email</label>
 							<input
 								type="text"

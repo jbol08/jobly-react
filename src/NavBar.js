@@ -1,39 +1,63 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./NavBar.css";
-import { NavLink } from "react-router-dom";
-import { Navbar, Nav, NavItem } from "reactstrap";
+import { NavLink, Link} from "react-router-dom";
+import UserContext from "./UserContext";
 
-function NavBar() {
-  return (
-    
-      <Navbar expand="md">
-        <NavLink exact to="/" className="navbar-brand">
-          Jobly
-        </NavLink>
+function NavBar({ logout }) {
+  const { currentUser } = useContext(UserContext);
 
-        <Nav className="ml-auto" navbar>
-          <NavItem>
-            <NavLink to="/companies">Companies</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/companies/apple">Drinks</NavLink>
-          </NavItem>
-          <NavItem>
-          <NavLink to="/jobs">Jobs</NavLink>
-          </NavItem>
-          <NavItem>
-          <NavLink to="/login">Login</NavLink>
-          </NavItem>
-          <NavItem>
-          <NavLink to="/signup">Signup</NavLink>
-          </NavItem>
-          <NavItem>
-          <NavLink to="/profile">Profile</NavLink>
-          </NavItem>
-        </Nav>
-      </Navbar>
-    
-  );
-}
+	const authNav = () => {
+		return (
+			<ul className="navbar-nav ml-auto">
+				<li className="nav-item mr-4">
+					<NavLink className="Navbar-link nav-link mr-4" exact to="/companies">
+						Companies
+					</NavLink>
+				</li>
+				<li className="nav-item mr-4">
+					<NavLink className="Navbar-link nav-link mr-4" exact to="/jobs">
+						Jobs
+					</NavLink>
+				</li>
+				<li className="nav-item">
+					<NavLink className="Navbar-link nav-link mr-4" exact to="/profile">
+						Edit Profile
+					</NavLink>
+				</li>
+				<li className="nav-item mr-4">
+					<Link className="Navbar-link nav-link" to="/" onClick={logout}>
+						Log out {currentUser.firstName || currentUser.username}
+					</Link>
+				</li>
+			</ul>
+		);
+	};
+
+	const anonNav = () => {
+		return (
+			<ul className="navbar-nav ml-auto">
+				<li className="nav-item mr-4">
+					<NavLink className="Navbar-link nav-link mr-4" exact to="/login">
+						Login
+					</NavLink>
+				</li>
+				<li className="nav-item mr-4">
+					<NavLink className="Navbar-link nav-link mr-4" exact to="/signup">
+						Sign Up
+					</NavLink>
+				</li>
+			</ul>
+		);
+	};
+	return (
+		<nav className="Navbar navbar navbar-expand-lg">
+			<Link className="Navbar-brand navbar-brand" to="/">
+				Jobly
+			</Link>
+			{currentUser ? authNav() : anonNav()}
+		</nav>
+	);
+};
+
 
 export default NavBar;

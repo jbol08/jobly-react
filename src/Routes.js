@@ -28,7 +28,7 @@ const sampleUser = {
 	userName  : 'SampleUser101'
 };
 
-function Routes({ login, signUp }) {
+function Routes({ login, signup }) {
 	return (
 		<div className="pt-5">
 			<Switch>
@@ -48,7 +48,7 @@ function Routes({ login, signUp }) {
 					<Login login={login} />
 				</Route>
 				<Route exact path="/signup">
-					<Signup signUp={signUp} />
+					<Signup signup={signup} />
 				</Route>
 				<Route exact path="/profile">
 					<Profile user={sampleUser} />
