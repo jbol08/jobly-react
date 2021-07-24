@@ -8,6 +8,7 @@ import Login from './Login';
 import Signup from './Signup';
 import Profile from './Profile';
 import PrivateRoute from './Private';
+
 const companiesList = [
 	{
 		name   : 'Apple',

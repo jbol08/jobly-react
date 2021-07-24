@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-function Signup({ signup }){
+
+const Signup = ({ signup }) => {
 	const INITIAL_STATE = {
 		email     : '',
 		password  : '',
@@ -14,21 +15,22 @@ function Signup({ signup }){
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
 	const [ errors, setErrors ] = useState([]);
 
-	function handleChange (event) {
-		const { name, value } = event.target;
+	const handleChange = (evt) => {
+		const { name, value } = evt.target;
 		setFormData((formData) => ({
 			...formData,
 			[name] : value
 		}));
 	};
 
-	async function handleSubmit(event){
-		event.preventDefault();
-		let result = await signup(formData);
-		if (result.success) {
+	const handleSubmit = async (evt) => {
+		evt.preventDefault();
+		console.log(signup)
+		let res = await signup(formData);
+		if (res.success) {
 			setFormData(INITIAL_STATE);
 			history.push('/companies');
-		} else setErrors(result.errors);
+		} else setErrors(res.errors);
 	};
 
 	return (
@@ -37,7 +39,7 @@ function Signup({ signup }){
 			<div className="card">
 				<div className="card-body">
 					<form onSubmit={handleSubmit}>
-						<div className="username form-group">
+						<div className="Signup-username form-group">
 							<label htmlFor="username">Username</label>
 							<input
 								type="text"

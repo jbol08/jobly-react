@@ -33,7 +33,7 @@ function NavBar({ logout }) {
 		);
 	};
 
-	const anonNav = () => {
+	const nonRegistered = () => {
 		return (
 			<ul className="navbar-nav ml-auto">
 				<li className="nav-item mr-4">
@@ -54,7 +54,7 @@ function NavBar({ logout }) {
 			<Link className="Navbar-brand navbar-brand" to="/">
 				Jobly
 			</Link>
-			{currentUser ? authNav() : anonNav()}
+			{currentUser ? authNav() : nonRegistered()}
 		</nav>
 	);
 };

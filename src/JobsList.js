@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm';
 import JoblyApi from './Api';
 import JobCardList from './JobCardList';
+
 const JobList = () => {
 	const [ jobs, setJobs ] = useState(null);
 

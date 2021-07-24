@@ -1,19 +1,38 @@
 
 import React, { useState, useEffect } from 'react';
-
-import NavBar from './NavBar';
 import { BrowserRouter } from 'react-router-dom';
-import JoblyApi from './Api';
 import Routes from './Routes';
+import Navbar from './NavBar';
+import JoblyApi from './Api';
 import UserContext from './UserContext';
-import LocalStorage from './hooks/LocalStorage';
+import useLocalStorage from './hooks/LocalStorage';
 import jwt from 'jsonwebtoken';
+
+export const TOKEN_STORAGE_ID = "jobly-token";
+
+/** Jobly application.
+ *
+ * - infoLoaded: has user data been pulled from API?
+ *   (this manages spinner for "loading...")
+ *
+ * - currentUser: user obj from API. This becomes the canonical way to tell
+ *   if someone is logged in. This is passed around via context throughout app.
+ *
+ * - token: for logged in users, this is their authentication JWT.
+ *   Is required to be set for most API calls. This is initially read from
+ *   localStorage and synced to there via the useLocalStorage hook.
+ *
+ * App -> Routes
+ */
+
 
 function App() {
   const [infoLoaded, setInfoLoaded] = useState(false);
   const [applicationIds, setApplicationIds] = useState(new Set([]));
   const [currentUser, setCurrentUser] = useState(null);
-  const [token, setToken] = LocalStorage('jobly-token');
+  const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
+
+
 
   useEffect(function loadUserInfo() {
     console.debug("App useEffect loadUserInfo", "token=", token);
@@ -22,6 +41,7 @@ function App() {
       if (token) {
         try {
           let { username } = jwt.decode(token);
+          // put the token on the Api class so it can use it to call the API.
           JoblyApi.token = token;
           let currentUser = await JoblyApi.getCurrentUser(username);
           setCurrentUser(currentUser);
@@ -33,14 +53,26 @@ function App() {
       }
       setInfoLoaded(true);
     }
+
+    // set infoLoaded to false while async getCurrentUser runs; once the
+    // data is fetched (or even if an error happens!), this will be set back
+    // to false to control the spinner.
     setInfoLoaded(false);
     getCurrentUser();
   }, [token]);
 
+  /** Handles site-wide logout. */
   function logout() {
     setCurrentUser(null);
     setToken(null);
   }
+
+  /** Handles site-wide signup.
+   *
+   * Automatically logs them in (set token) upon signup.
+   *
+   * Make sure you await this function and check its return value!
+   */
   async function signup(signupData) {
     try {
       let token = await JoblyApi.signup(signupData);
@@ -52,6 +84,10 @@ function App() {
     }
   }
 
+  /** Handles site-wide login.
+   *
+   * Make sure you await this function and check its return value!
+   */
   async function login(loginData) {
     try {
       let token = await JoblyApi.login(loginData);
@@ -62,31 +98,31 @@ function App() {
       return { success: false, errors };
     }
   }
+
+  /** Checks if a job has been applied for. */
   function hasAppliedToJob(id) {
     return applicationIds.has(id);
   }
 
+  /** Apply to a job: make API call and update set of application IDs. */
   function applyToJob(id) {
     if (hasAppliedToJob(id)) return;
     JoblyApi.applyToJob(currentUser.username, id);
     setApplicationIds(new Set([...applicationIds, id]));
   }
-  
 
   if (!infoLoaded) return <h1>Loading. . .</h1>;
-  return (
 
-    <div className="App">
-       <BrowserRouter>
+  return (
+      <BrowserRouter>
         <UserContext.Provider
             value={{ currentUser, setCurrentUser, hasAppliedToJob, applyToJob }}>
           <div className="App">
-            <NavBar logout={logout} />
+            <Navbar logout={logout} />
             <Routes login={login} signup={signup} />
           </div>
         </UserContext.Provider>
       </BrowserRouter>
-    </div>
   );
 }
 
